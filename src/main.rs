@@ -1,4 +1,5 @@
 use std::{error::Error, io};
+use components::board;
 use crossterm::{
     event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode, KeyEventKind},
     execute,
@@ -53,48 +54,27 @@ fn run_app<B: Backend>(terminal: &mut Terminal<B>, mut app: states::App) -> io::
 
 // main drawing function
 pub fn ui(f: &mut Frame, app: &mut states::App) {
-    let outer_layout = Layout::default()
+    let area = f.size();
+
+    let padding_layout = Layout::default()
         .direction(Direction::Vertical)
         .constraints(vec![
-            Constraint::Percentage(10), // Score section
-            Constraint::Percentage(80), // Game board
-            Constraint::Percentage(10), // Controls section
+            Constraint::Percentage(5),
+            Constraint::Percentage(90),
+            Constraint::Percentage(5)
         ])
-        .split(f.size());
+        .split(area);
 
-    let board_area = outer_layout[1];
-
-    let inner_layout = Layout::default()
+    let outer = Layout::default()
         .direction(Direction::Horizontal)
         .constraints(vec![
-            Constraint::Percentage(25), // Left padding
-            Constraint::Percentage(50), // Board
-            Constraint::Percentage(25), // Right padding
+            Constraint::Percentage(5),
+            Constraint::Percentage(70),
+            Constraint::Percentage(20),
+            Constraint::Percentage(5)
         ])
-        .split(board_area);
+        .split(padding_layout[1]);
 
-    let score_layout = Layout::default()
-        .direction(Direction::Horizontal)
-        .constraints(vec![
-            Constraint::Percentage(25), // Left padding
-            Constraint::Percentage(50), // Centered Score
-            Constraint::Percentage(25), // Right padding
-        ])
-        .split(outer_layout[0]);
-
-    let controls_layout = Layout::default()
-        .direction(Direction::Horizontal)
-        .constraints(vec![
-            Constraint::Percentage(25), // Left padding
-            Constraint::Percentage(50), // Centered Controls
-            Constraint::Percentage(25), // Right padding
-        ])
-        .split(outer_layout[2]);
-
-    // header - score
-    components::header::render(f, app, score_layout[1]);   
-    // board
-    components::board::render(f, app, inner_layout[1]); 
-    // footer
-    components::footer::render(f, app, controls_layout[1]);
+    components::board::render(f, app, outer[1]);
+    components::infos::render(f, app, outer[2]);    
 }
