@@ -1,16 +1,16 @@
 use rand::Rng;
 use ratatui::{layout::Rect, style::Color, layout::{Constraint, Direction, Layout}};
 
-// generates a random number - either 2 or 4
+// generates a random number 2 or 4 as per the rules of the game (90% chance of 2, 10% chance of 4)
 pub fn random_two_or_four() -> u32 {
     let mut rng = rand::rng();
-    if rng.random_bool(0.5) { 2 } else { 4 }
+    if rng.random_bool(0.9) { 2 } else { 4 }
 }
 
 // generates a random tile index
-pub fn random_tile(board_size: u32) -> u32 {
+pub fn random_tile(board_size: u32) -> usize {
     let mut rng = rand::rng();
-    rng.random_range(0..board_size * board_size)
+    rng.random_range(0..board_size * board_size) as usize
 }
 
 // gets color of the tile based on tis value

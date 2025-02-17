@@ -19,7 +19,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut terminal = Terminal::new(backend)?;
 
     // create app and run it
-    let app = states::App::new();
+    let app = states::App::new(None);
     let _ = run_app(&mut terminal, app);
 
     // restore terminal
@@ -39,11 +39,22 @@ fn run_app<B: Backend>(terminal: &mut Terminal<B>, mut app: states::App) -> io::
     loop {
         terminal.draw(|f| ui(f, &mut app))?;
 
+        let board_size = app.board.size as usize;
+
         if let Event::Key(key) = event::read()? {
             if key.kind == KeyEventKind::Press {
                 use KeyCode::*;
                 match key.code {
-                    Char('q') | Esc => return Ok(()),
+                    Char('q') => return Ok(()),
+                    Char('n') => app = states::App::new(Some(board_size)),
+                    Char('s') => app.page = states::Page::Settings,
+                    Esc => app.page = states::Page::Game,
+                    Char('+') => app.change_difficulty(states::SettingsDir::Up),
+                    Char('-') => app.change_difficulty(states::SettingsDir::Down),
+                    Left => app.move_tiles(states::MoveDir::Left),
+                    Right => app.move_tiles(states::MoveDir::Right),
+                    Up => app.move_tiles(states::MoveDir::Up),
+                    Down => app.move_tiles(states::MoveDir::Down),
                     _ => {}
                 }
             }
@@ -76,5 +87,11 @@ pub fn ui(f: &mut Frame, app: &mut states::App) {
 
     components::board::render(f, app, outer[1]);
     components::infos::render(f, app, outer[2]);
-    components::game_over::render(f, app, area);    
+
+    // render popups if needed
+    if app.page == states::Page::Settings {
+        components::settings::render(f, app, area);
+    } else if app.page == states::Page::GameOver {
+        components::game_over::render(f, app, area);    
+    }
 }
