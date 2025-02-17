@@ -1,5 +1,4 @@
 use std::{error::Error, io};
-use components::board;
 use crossterm::{
     event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode, KeyEventKind},
     execute,
@@ -9,7 +8,7 @@ use ratatui::prelude::*;
 
 mod states;
 mod components;
-
+pub mod helpers;
 
 fn main() -> Result<(), Box<dyn Error>> {
     // setup terminal
@@ -21,7 +20,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // create app and run it
     let app = states::App::new();
-    run_app(&mut terminal, app);
+    let _ = run_app(&mut terminal, app);
 
     // restore terminal
     disable_raw_mode()?;
@@ -54,7 +53,7 @@ fn run_app<B: Backend>(terminal: &mut Terminal<B>, mut app: states::App) -> io::
 
 // main drawing function
 pub fn ui(f: &mut Frame, app: &mut states::App) {
-    let area = f.size();
+    let area = f.area();
 
     let padding_layout = Layout::default()
         .direction(Direction::Vertical)
@@ -76,5 +75,6 @@ pub fn ui(f: &mut Frame, app: &mut states::App) {
         .split(padding_layout[1]);
 
     components::board::render(f, app, outer[1]);
-    components::infos::render(f, app, outer[2]);    
+    components::infos::render(f, app, outer[2]);
+    components::game_over::render(f, app, area);    
 }

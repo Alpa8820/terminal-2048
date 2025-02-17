@@ -6,21 +6,20 @@ pub fn render(f: &mut Frame, app: &mut App, area: Rect) {
         .direction(Direction::Vertical)
         .margin(1)
         .constraints(vec![
-            Constraint::Percentage(10), // game title
-            Constraint::Length(2),      // spacer
+            Constraint::Percentage(15), // game title
+            Constraint::Length(0),      // spacer
             Constraint::Length(1),      // score
             Constraint::Length(1),      // highest score
             Constraint::Min(0),         // flexible space
-            Constraint::Percentage(10), // instructions
+            Constraint::Percentage(20), // instructions
             Constraint::Length(1),      // spacer
-            Constraint::Percentage(10), // movements
-            Constraint::Length(2),      // spacer
+            Constraint::Percentage(25), // movements
         ])
         .split(area);
 
-    let game_header = Paragraph::new(Line::from("2048 Terminal Game"))
+    let game_header = Paragraph::new(Line::from("2048 Terminal Game".blue().bold()))
         .centered()
-        .block(Block::default().borders(Borders::ALL));
+        .block(Block::default());
 
     let highest_score = Line::from(vec![
         " Highest Score: ".into(),
@@ -40,7 +39,6 @@ pub fn render(f: &mut Frame, app: &mut App, area: Rect) {
         .centered()
         .block(Block::default());
 
-    // Instructions (each command on its own line)
     let instructions_text = Text::from(vec![
         Line::from(vec![" Quit ".into(), "<Q>".green().bold()]),
         Line::from(vec![" New Game ".into(), "<N>".green().bold()]),
@@ -52,7 +50,6 @@ pub fn render(f: &mut Frame, app: &mut App, area: Rect) {
         .wrap(Wrap { trim: true })
         .block(Block::default());
 
-    // Movements (each command on its own line)
     let movements_text = Text::from(vec![
         Line::from(vec![" Move Up ".into(), "<↑>".green().bold()]),
         Line::from(vec![" Move Down ".into(), "<↓>".green().bold()]),
@@ -65,7 +62,7 @@ pub fn render(f: &mut Frame, app: &mut App, area: Rect) {
         .wrap(Wrap { trim: true })
         .block(Block::default());
 
-    let block = Block::default().borders(Borders::ALL);
+    let block = Block::default().borders(Borders::ALL).border_type(BorderType::Rounded);
 
     f.render_widget(block, area);
     f.render_widget(game_header, layout[0]);

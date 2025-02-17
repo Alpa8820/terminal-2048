@@ -20,12 +20,6 @@ pub struct App {
 	pub score: u64,
 }
 
-pub struct Cell {
-	pub value: u32,
-	pub row: u32,
-	pub col: u32,
-}
-
 impl App {
 	pub fn new() -> App {
 		App {
@@ -39,9 +33,3 @@ impl App {
 		}
 	}
 }
-
-impl Cell {
-
-}
-
-
