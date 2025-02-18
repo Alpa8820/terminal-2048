@@ -34,8 +34,12 @@ pub fn render(f: &mut Frame, app: &mut App, area: Rect) {
             block_text = block_value.to_string();
         }
 
-        let game_blocks = Paragraph::new(format!("{}", block_text))
-            .style(Style::default().fg(get_tile_color(block_value)))
+        let game_blocks = Paragraph::new(block_text)
+            .style(
+                Style::default()
+                    .fg(get_tile_color(block_value))
+                    .add_modifier(Modifier::BOLD),
+            )
             .block(
                 Block::default()
                     .borders(Borders::ALL)

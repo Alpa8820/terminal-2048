@@ -1,5 +1,6 @@
 use ratatui::{prelude::*, widgets::*};
 use crate::states::App;
+use crate::helpers::get_highest_score;
 
 pub fn render(f: &mut Frame, app: &mut App, area: Rect) {
     let layout = Layout::default()
@@ -11,6 +12,8 @@ pub fn render(f: &mut Frame, app: &mut App, area: Rect) {
             Constraint::Length(1),      // score
             Constraint::Length(1),      // highest score
             Constraint::Min(0),         // flexible space
+            Constraint::Length(1),      // difficulty
+            Constraint::Min(0),         // flexible space
             Constraint::Percentage(20), // instructions
             Constraint::Length(1),      // spacer
             Constraint::Percentage(25), // movements
@@ -21,9 +24,11 @@ pub fn render(f: &mut Frame, app: &mut App, area: Rect) {
         .centered()
         .block(Block::default());
 
-    let highest_score = Line::from(vec![
+    let highest_score = get_highest_score();  // read from external file
+
+    let highest_score_text = Line::from(vec![
         " Highest Score: ".into(),
-        app.score.to_string().yellow().bold(),
+        highest_score.to_string().yellow().bold(),
     ]);
 
     let score = Line::from(vec![
@@ -35,7 +40,22 @@ pub fn render(f: &mut Frame, app: &mut App, area: Rect) {
         .centered()
         .block(Block::default());
 
-    let highest_score_paragraph = Paragraph::new(highest_score)
+    let highest_score_paragraph = Paragraph::new(highest_score_text)
+        .centered()
+        .block(Block::default());
+
+    let difficulty = match app.board.size {
+        4 => "Easy",
+        5 => "Medium",
+        _ => "Hard",
+    };
+
+    let difficulty_text = Line::from(vec![
+        " Difficulty: ".into(),
+        difficulty.to_string().red().bold(),
+    ]);
+
+    let difficulty_paragraph = Paragraph::new(difficulty_text)
         .centered()
         .block(Block::default());
 
@@ -67,8 +87,9 @@ pub fn render(f: &mut Frame, app: &mut App, area: Rect) {
     f.render_widget(block, area);
     f.render_widget(game_header, layout[0]);
     f.render_widget(score_paragraph, layout[2]);   
-    f.render_widget(highest_score_paragraph, layout[3]);    
+    f.render_widget(highest_score_paragraph, layout[3]); 
+    f.render_widget(difficulty_paragraph, layout[5]);
 
-    f.render_widget(footer_instructions, layout[5]);
-    f.render_widget(footer_movements, layout[7]);
+    f.render_widget(footer_instructions, layout[7]);
+    f.render_widget(footer_movements, layout[9]);
 }

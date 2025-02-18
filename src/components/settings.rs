@@ -2,7 +2,7 @@ use ratatui::{prelude::*, widgets::*};
 use crate::states::App;
 use crate::helpers::centered_rect;
 
-pub fn render(f: &mut Frame, app: &mut App, area: Rect) {
+pub fn render(f: &mut Frame, app: &mut App, _area: Rect) {
     let popup_block = Block::default()
         .title("SETTINGS:")
         .borders(Borders::ALL).border_type(BorderType::Double).border_style(Color::White)
@@ -17,9 +17,7 @@ pub fn render(f: &mut Frame, app: &mut App, area: Rect) {
         .margin(1)
         .constraints([
             Constraint::Length(1),
-            Constraint::Length(1),
             Constraint::Length(3),
-            Constraint::Length(1),
             Constraint::Length(1),
             Constraint::Length(1),
         ])
@@ -41,13 +39,13 @@ pub fn render(f: &mut Frame, app: &mut App, area: Rect) {
         ]),
         Line::from(vec![
             " Medium ".into(),
-            "(6x6)".yellow().bold(),
-            if current_difficulty == 6 { " <- Current".red().bold() } else { "".into() }
+            "(5x5)".yellow().bold(),
+            if current_difficulty == 5 { " <- Current".red().bold() } else { "".into() }
         ]),
         Line::from(vec![
             " Hard ".into(),
-            "(8x8)".yellow().bold(),
-            if current_difficulty == 8 { " <- Current".red().bold() } else { "".into() }
+            "(6x6)".yellow().bold(),
+            if current_difficulty == 6 { " <- Current".red().bold() } else { "".into() }
         ])
     ]);
 
@@ -56,19 +54,14 @@ pub fn render(f: &mut Frame, app: &mut App, area: Rect) {
         .wrap(Wrap { trim: true })
         .block(Block::default());
 
-    f.render_widget(difficulty_selection, popup_chunks[2]);
+    f.render_widget(difficulty_selection, popup_chunks[1]);
 
 
     let change_difficulty_text = Paragraph::new(Line::from(vec![
         " Move Up ".into(), "<+>".yellow().bold(),
         " Move Down ".into(), "<->".yellow().bold(),
-    ])).centered();
-
-    let instructions_text = Paragraph::new(Line::from(vec![
         " Close ".into(), "<ESC>".yellow().bold(),
-        // " Start Game With This Settings ".into(), "<N>".yellow().bold(),
     ])).centered();
 
-    f.render_widget(change_difficulty_text, popup_chunks[4]);
-    f.render_widget(instructions_text, popup_chunks[5]);
+    f.render_widget(change_difficulty_text, popup_chunks[3]);
 }

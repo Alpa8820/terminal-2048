@@ -57,3 +57,8 @@ pub fn centered_rect(percent_x: u16, percent_y: u16, r: Rect) -> Rect {
         ])
         .split(popup_layout[1])[1] // Return the center rectangle - popup
 }
+
+// read highest score from file
+pub fn get_highest_score() -> u64 {
+    0
+}

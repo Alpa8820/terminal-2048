@@ -2,7 +2,7 @@ use ratatui::{prelude::*, widgets::*};
 use crate::states::App;
 use crate::helpers::centered_rect;
 
-pub fn render(f: &mut Frame, app: &mut App, area: Rect) {
+pub fn render(f: &mut Frame, app: &mut App, _area: Rect) {
     let popup_block = Block::default()
         .title("GAME OVER!")
         .borders(Borders::ALL).border_type(BorderType::Double).border_style(Color::White)
