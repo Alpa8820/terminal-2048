@@ -1,5 +1,9 @@
 use rand::Rng;
 use ratatui::{layout::Rect, style::Color, layout::{Constraint, Direction, Layout}};
+use std::fs::OpenOptions;
+use std::io::{Read, Write};
+use std::fs::File;
+
 
 // generates a random number 2 or 4 as per the rules of the game (90% chance of 2, 10% chance of 4)
 pub fn random_two_or_four() -> u32 {
@@ -60,5 +64,20 @@ pub fn centered_rect(percent_x: u16, percent_y: u16, r: Rect) -> Rect {
 
 // read highest score from file
 pub fn get_highest_score() -> u64 {
-    0
+    let mut file = File::open("highest_score.txt").unwrap();
+    let mut score_str = String::new();
+    file.read_to_string(&mut score_str).unwrap();
+    score_str.trim().parse::<u64>().unwrap_or(0)
+}
+
+// save highest score to file
+pub fn save_highest_score(score: u64) {
+    //open file, clear content before writing new score
+    if let Ok(mut file) = OpenOptions::new()
+        .write(true)    
+        .create(true)   
+        .open("highest_score.txt")
+    {
+        let _ = writeln!(file, "{}", score);
+    }
 }

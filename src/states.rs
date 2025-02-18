@@ -1,4 +1,4 @@
-use crate::helpers::{random_tile, random_two_or_four};
+use crate::helpers::{get_highest_score, random_tile, random_two_or_four, save_highest_score};
 use rand::Rng;
 
 pub struct Board {
@@ -80,6 +80,8 @@ impl App {
 		}
 
 		// 1. make move
+		// ( up => transpose -> move left -> transpose )
+		// ( down => transpose -> move right -> transpose )
 		match direction {
 			MoveDir::Up => {
 				self.transpose_board();
@@ -98,12 +100,10 @@ impl App {
 		// 2. add new tile
 		self.add_tile();
 
-		// 3. update score
-		self.update_score();
-
 		// check if game is over -> show popup (and save max score to file)
 		if self.check_game_over() {
 			self.page = Page::GameOver;
+			self.update_highest_score();
 		}
 	}
 
@@ -126,6 +126,9 @@ impl App {
 					*direction == MoveDir::Left &&
 					!merged[col] && !merged[col - 1]
 				{
+					// increment score
+					self.score += (self.board.board[row][col] as u64) * 2;
+					// make merge
 					self.board.board[row][col - 1] *= 2;
 					self.board.board[row][col] = 0;
 					merged[col - 1] = true;
@@ -138,6 +141,9 @@ impl App {
 					*direction == MoveDir::Right &&
 					!merged[col] && !merged[col + 1]
 				{
+					// increment score
+					self.score += (self.board.board[row][col] as u64) * 2;
+					// make merge
 					self.board.board[row][col + 1] *= 2;
 					self.board.board[row][col] = 0;
 					merged[col + 1] = true;
@@ -174,8 +180,13 @@ impl App {
 		self.board.board[row_index] = new_row;
 	}	
 
-	pub fn update_score(&mut self) {
+	pub fn update_highest_score(&mut self) {
 		// if new highest score save to file
+		let highest_score = get_highest_score();
+		if self.score > highest_score {
+			// save new highest score to file
+			save_highest_score(self.score);
+		}
 	}
 
 	pub fn add_tile(&mut self) {
