@@ -11,12 +11,6 @@ pub fn random_two_or_four() -> u32 {
     if rng.random_bool(0.9) { 2 } else { 4 }
 }
 
-// generates a random tile index
-pub fn random_tile(board_size: u32) -> usize {
-    let mut rng = rand::rng();
-    rng.random_range(0..board_size * board_size) as usize
-}
-
 // gets color of the tile based on tis value
 pub fn get_tile_color(value: u32) -> Color {
     match value {
