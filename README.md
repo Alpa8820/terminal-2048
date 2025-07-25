@@ -79,6 +79,3 @@ Special thanks to these amazing libraries:
 
 
 Please star ⭐ this repo, if you like it.
-
-
-Feel free to contact me [tijan@tijan.dev](mailto:tijan@tijan.dev). Or visit my [website](https://tijan.dev/).
