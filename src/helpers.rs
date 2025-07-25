@@ -26,10 +26,10 @@ pub fn get_tile_color(value: u32) -> Color {
         1024 => Color::Rgb(237, 197, 63),  // Deep yellow
         2048 => Color::Rgb(237, 194, 46),  // Golden yellow
         4096 => Color::Rgb(60, 58, 50),    // Dark gray
-        8192 => Color::Rgb(60, 58, 50),    // Dark gray
-        16384 => Color::Rgb(60, 58, 50),   // Dark gray
-        32768 => Color::Rgb(60, 58, 50),   // Dark gray
-        65536 => Color::Rgb(60, 58, 50),   // Dark gray
+        8192 => Color::Rgb(255, 127, 0),    // ff7f00
+        16384 => Color::Rgb(255, 0, 222),   // ff00de
+        32768 => Color::Rgb(12, 0, 255),   // 0c00ff
+        65536 => Color::Rgb(0, 255, 102),   // 00ff66
         _ => Color::Rgb(205, 193, 180),    // Default tile background
     }
 }
